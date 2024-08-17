@@ -30,6 +30,7 @@ void voltage_conversion(char *voltage_array) {
 	voltage_array[1] = (int_part % 10) + '0'; // Ones digit
 	voltage_array[2] = '.'; // Decimal point
 	voltage_array[3] = dec_part + '0'; // Single decimal digit
+	voltage_array[4] = '\0'; // Null terminator
 }
 
 void current_conversion(char *current_array) {
@@ -37,6 +38,7 @@ void current_conversion(char *current_array) {
 	current_array[0] = (PeakCurrent / 100) + '0'; // Hundreds digit
 	current_array[1] = ((PeakCurrent / 10) % 10) + '0'; // Tens digit
 	current_array[2] = (PeakCurrent % 10) + '0'; // Ones Digit
+	current_array[4] = '\0'; // Null terminator
 }
 
 // Similar conversion as voltage except one integer part and two decimal parts
@@ -48,6 +50,7 @@ void power_conversion(char *power_array) {
 	power_array[1] = '.'; // Decimal point
 	power_array[2] = (dec_part / 10) + '0'; // Tenths Digit
 	power_array[3] = (dec_part % 10) + '0'; // Hundredths Digit
+	power_array[4] = '\0'; // Null terminator
 }
 
 int main(void)
@@ -61,9 +64,9 @@ int main(void)
 	char power_string[] = "Power is: ";
 	
 	// Initialise arrays for the numbers
-	char voltage_array[4];
-	char current_array[3];
-	char power_array[4];
+	char voltage_array[5];
+	char current_array[4];
+	char power_array[5];
 	
 	// Fill the number arrays
 	voltage_conversion(voltage_array);
