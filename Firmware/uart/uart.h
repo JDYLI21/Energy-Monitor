@@ -15,7 +15,7 @@
 
 void uart_init(uint16_t ubrr);
 void uart_transmit(uint8_t data);
-void uart_transmit_string(char *str);
+void uart_transmit_string(const char *str);
 void uart_transmit_newline();
 
 #endif

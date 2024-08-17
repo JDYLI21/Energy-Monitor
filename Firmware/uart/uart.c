@@ -24,9 +24,10 @@ void uart_transmit(uint8_t data) {
 }
 
 // For transmitting the string sequence and the digits so I don't need so many for loops
-void uart_transmit_string(char *str) {
-	for (int i = 0; i < strlen(str); i++) {
-		uart_transmit(str[i]);
+void uart_transmit_string(const char *str) {
+	// Unpacks the str char array and steps through it
+	while (*str) {
+		uart_transmit(*str++);
 	}
 }
 
