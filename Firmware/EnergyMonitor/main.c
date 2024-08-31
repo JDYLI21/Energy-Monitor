@@ -51,11 +51,11 @@ int main(void)
 		float phase = delta * 2 * M_PI / PERIOD_COUNTS;
 		
 		// Initialise the arrays to hold the samples for each channel
-		uint16_t voltages[50];
-		uint16_t currents[50];
+		uint16_t voltages[100];
+		uint16_t currents[100];
 		
 		// Get 50 samples from each channel
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 100; i++) {
 			get_adc_value(0, voltages, i);
 			get_adc_value(1, currents, i);
 		}
@@ -65,7 +65,7 @@ int main(void)
 		int32_t rms_current = 0;
 		
 		// Undo the offset and amplification then square the result and store in its rms variable
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 100; i++) {
 			// Undo the offset
 			int32_t voltage_diff = voltages[i] - OFFSET;
 			int32_t current_diff = currents[i] - OFFSET;
@@ -81,8 +81,8 @@ int main(void)
 		
 		// Need to typecast the calculation as signed 32 bit int because sqrt returns a float
 		// Average the rms results then square root it to get the rms value
-		rms_voltage = (int32_t)sqrt(rms_voltage / 50);
-		rms_current = (int32_t)sqrt(rms_current / 50);
+		rms_voltage = (int32_t)sqrt(rms_voltage / 100);
+		rms_current = (int32_t)sqrt(rms_current / 100);
 		
 		// Real power calculation with the phase difference, then converted to watts
 		int32_t power = (rms_voltage * rms_current) * cos(phase) / 1000;
