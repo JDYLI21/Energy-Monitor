@@ -15,12 +15,6 @@
 #include <stdio.h>
 #include <math.h>
 
-// Define the circuit parameters, such as amplification and voltage offsets
-#define VOLTAGE_SCALE 1*22 // 1 for Unity Gain Amplifier and 22 for Voltage Divider
-#define CURRENT_SCALE 39 // 3.9 but avoiding floats here
-#define OFFSET 2500 // mV
-#define PERIOD_COUNTS 4000 // 2Mhz / 500Hz
-
 // Reads the ADC value for a given channel, converts it to its milivolt value then stores
 // it in the channel's array in the given iter position
 void get_adc_value(uint8_t channel, uint16_t *channel_array, uint8_t iter) {
@@ -42,15 +36,19 @@ int main(void)
 	
 	sei();
 	
+	// Define the circuit parameters, such as amplification and voltage offsets
+	const int32_t VOLTAGE_SCALE = 1 * 22; // 1 for Unity Gain Amplifier and 22 for Voltage Divider
+	const int32_t CURRENT_SCALE = 39; // 3.9 but avoiding floats here
+	const int32_t OFFSET = 2500; // mV
+	const float PERIOD_COUNTS = 4000; // 2Mhz / 500Hz
+	
 	/* Replace with your application code */
 	while (1)
 	{
-		/*
 		while (!crossing_ready); // Wait until the phase difference is ready to be used
 		
 		// Calculate the phase difference in radians
 		float phase = delta * 2 * M_PI / PERIOD_COUNTS;
-		*/
 		
 		// Initialise the arrays to hold the samples for each channel
 		uint16_t voltages[50];
@@ -75,7 +73,7 @@ int main(void)
 			// Apply the amplification
 			int32_t scaled_voltage = voltage_diff * VOLTAGE_SCALE; 
 			int32_t scaled_current = (current_diff * CURRENT_SCALE) / 10; // Change current scale back to 3.9
-			
+
 			// Square and increment result in its respective rms variable
 			rms_voltage += scaled_voltage * scaled_voltage;
 			rms_current += scaled_current * scaled_current;
@@ -87,10 +85,10 @@ int main(void)
 		rms_current = (int32_t)sqrt(rms_current / 50);
 		
 		// Real power calculation with the phase difference, then converted to watts
-		int32_t power = (rms_voltage * rms_current) * cos(30) / 1000;
+		int32_t power = (rms_voltage * rms_current) * cos(phase) / 1000;
 		
 		char buffer[100];
-		snprintf(buffer, sizeof(buffer), "Phase:  radians\r\nRMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\nAverage Power: %lu mW\r\n", rms_voltage, rms_current, power);
+		snprintf(buffer, sizeof(buffer), "\r\nPhase: %d degrees\r\nRMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\nAverage Power: %lu mW\r\n", (int)(phase*180/M_PI), rms_voltage, rms_current, power);
 		uart_transmit_string(buffer);
 		
 		_delay_ms(1000);
