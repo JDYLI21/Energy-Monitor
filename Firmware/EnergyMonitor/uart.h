@@ -1,7 +1,7 @@
 /*
  * uart.h
  *
- * Created: 17/08/2024 11:51:35 pm
+ * Created: 31/08/2024 1:44:12 am
  *  Author: Y3J5bw
  */ 
 #ifndef UART_H
@@ -16,6 +16,8 @@
 void uart_init(uint16_t ubrr);
 void uart_transmit(uint8_t data);
 void uart_transmit_string(const char *str);
-void uart_transmit_newline();
+void uart_transmit_newline(void);
+void uart_transmit_count(uint16_t count);
+void ascii_convert(uint16_t count, char *buffer);
 
 #endif
