@@ -9,7 +9,15 @@
 
 #include <stdint.h>
 
+// The total number of samples of the samples per period multiplied by the amount of periods
+// that we are going to sample over. This will change until we are barely within spec.
+#define SAMPLES_PER_PERIOD 20
+#define NUM_PERIODS 5
+#define TOTAL_SAMPLES (SAMPLES_PER_PERIOD * NUM_PERIODS)
+
+extern volatile uint16_t voltages[TOTAL_SAMPLES];
+extern volatile uint16_t currents[TOTAL_SAMPLES];
+
 void adc_init(void);
-uint16_t adc_read(uint8_t channel);
 
 #endif
