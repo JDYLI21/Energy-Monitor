@@ -45,5 +45,7 @@ void adc_init(void) {
 	ADMUX |= (1 << REFS0); // Set reference voltage to A_VCC
 	ADCSRA |= (1 << ADPS2); // Prescaler of 16 giving us sampling rate of 9.6kHz assuming 2Mhz clock
 	ADCSRA = (1 << ADEN) | (1 << ADIE); // Enable ADC and interrupt on conversion
-	ADCSRB = 0x00; // Clear ADCSRB register
+	ADCSRA |= (1 << ADATE); // Enable auto trigger
+	ADCSRA |= (1 << ADSC); // Start ADC conversion
+	ADCSRB = (1 << ADTS1) | (1 << ADTS0); // Set to trigger on timer1 COMPA
 }

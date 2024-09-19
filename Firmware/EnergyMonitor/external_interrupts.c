@@ -16,10 +16,11 @@ volatile uint32_t time_difference = 0;
 
 // For when voltage's zero crossing has been detected
 ISR(INT0_vect) {
+	cli();
 	timer2_stop();
 	// For if timer2 overflows as it is 8 bit and we need to go up to 500
-	time_difference = (timer2_overflow_count << 8) + TCNT2; // Add TCNT2 count
-	
+	time_difference += (timer2_overflow_count * 255) + TCNT2; // Add TCNT2 count
+	sei();
 }
 
 // For when current's zero crossing has been detected

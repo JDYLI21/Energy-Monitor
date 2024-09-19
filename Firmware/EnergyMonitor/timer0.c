@@ -10,7 +10,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile uint8_t int_flag = 0;
 volatile uint8_t time_count = 0;
 
 ISR(TIMER0_COMPA_vect) {
@@ -20,6 +19,6 @@ ISR(TIMER0_COMPA_vect) {
 void timer0_init(void) {
 	TCCR0A |= (1 << WGM01); // CTC mode
 	TCCR0B = (1 << CS01); // Prescaler of 8
-	OCR0A = 14; // (F_CPU / (8 * 60Hz in microseconds)) - 1 for 60Hz refresh
+	OCR0A = 49; // (F_CPU / (8 * 20Hz in microseconds)) - 1 for 20Hz refresh
 	TIMSK0 |= (1 << OCIE0A); // Enable COMPA interrupt
 }

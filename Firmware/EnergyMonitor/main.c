@@ -38,9 +38,6 @@ int main(void)
 	const int32_t OFFSET = 2500; // mV
 	const uint16_t ticks_per_period = 500; // Ticks per period on timer1 before compare match A (1 / (2Mhz / 8) / 500Hz)
 	
-	// Set flag for when the ADC is capturing so main routine doesn't run
-	capturing = 1;
-	
 	separate_and_load_characters(0);
 	
 	/* Replace with your application code */
@@ -50,7 +47,7 @@ int main(void)
 		while (capturing) {}
 			
 		// Process the samples below
-		uint32_t phase = time_difference * 1000 / ticks_per_period * 2 * M_PI; // Times 1000 to avoid decimals
+		uint32_t phase = time_difference / TOTAL_SAMPLES * 1000 * 2 * M_PI / ticks_per_period; // Times 1000 to avoid decimals
 		
 		// These two variables will be incremented with the calculated squared values
 		int32_t rms_voltage = 0;
@@ -89,11 +86,11 @@ int main(void)
 		separate_and_load_characters(rms_voltage);
 		
 		char buffer[100];
-		snprintf(buffer, sizeof(buffer), "\r\nPhase: %d degrees Time Diff: %lu\r\nRMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\nAverage Power: %lu mW\r\n", (int)(phase), time_difference, rms_voltage, rms_current, power);
+		snprintf(buffer, sizeof(buffer), "\r\nPhase: %d degrees Time Diff: %lu\r\nRMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\nAverage Power: %lu mW\r\n", (int)(phase * 180 / M_PI), time_difference / TOTAL_SAMPLES, rms_voltage, rms_current, power);
 		uart_transmit_string(buffer);
 		
-		capturing = 1;
 		timer1_init();
+		time_difference = 0;
 
 	}
 }
