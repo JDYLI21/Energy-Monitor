@@ -11,6 +11,7 @@
 
 //Array containing which segments to turn on to display a number between 0 to 9
 //4 characters to be displayed on Ds1 to Ds 4
+// 0x3E is U on the right most display for V
 static volatile uint8_t disp_characters[4]={0x3E,0,0,0};
 //The current digit (e.g. the 1's, the 10's) of the 4-digit number we're displaying
 static volatile uint8_t disp_position=0;
@@ -45,7 +46,7 @@ void separate_and_load_characters(uint32_t num) {
 		disp_characters[i] = seg_map[digit];
 		
 		// Display the decimal point right after the first digit
-		disp_characters[3] |= (1 << 7);
+		disp_characters[2] |= (1 << 7);
 		
 		// Shift the number to the next digit for the next iteration
 		num /= 10;

@@ -46,6 +46,7 @@ ISR(INT1_vect) {
 		if (timer0_flag) {
 			sampling = 0;
 			samples_taken += 1;
+			set_display = 1;
 		} else {
 			sampling = 1;
 			TCNT0 = 0;

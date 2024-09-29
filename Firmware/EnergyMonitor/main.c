@@ -105,8 +105,8 @@ int main(void)
 			int32_t current_diff = current_mA - OFFSET;
 			
 			// Apply the amplification
-			int32_t scaled_voltage = voltage_diff * VOLTAGE_SCALE; 
-			int32_t scaled_current = (current_diff * CURRENT_SCALE) / 10; // Change current scale back to 3.9
+			int32_t scaled_voltage = (voltage_diff * VOLTAGE_SCALE) / 10 / 10; 
+			int32_t scaled_current = (current_diff * CURRENT_SCALE); // Change current scale back to 3.9
 			
 			// Square and increment result in its respective rms variable
 			rms_voltage += scaled_voltage * scaled_voltage;
@@ -118,7 +118,10 @@ int main(void)
 		rms_voltage = (uint32_t)sqrt(rms_voltage / sample_index);
 		rms_current = (uint32_t)sqrt(rms_current / sample_index);
 		
+		uint32_t power = rms_voltage * (10) * rms_current * cos((uint32_t)time_difference * 2 * M_PI / (uint32_t)period);
+		power /= 10000;
 		
+		/*
 		for (int i = 0; i < sample_index; i++) {
 			uart_transmit_count(voltages[i]);
 			uart_transmit(',');
@@ -127,9 +130,10 @@ int main(void)
 			uart_transmit(13);
 			uart_transmit(10);
 		} 
+		*/
 		
 		char buffer2[100];
-		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\n", rms_voltage, rms_current);
+		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\n Power: %lu W\r\n", rms_voltage, rms_current, power);
 		uart_transmit_string(buffer2);
 		
 		while (one_sec_count < 10000) {
@@ -138,7 +142,7 @@ int main(void)
 			}
 		}
 		
-		separate_and_load_characters(rms_voltage);
+		separate_and_load_characters(power);
 		
 		one_sec_count = 0;
 		
