@@ -9,8 +9,8 @@
 #ifndef TIMER0_H
 #define TIMER0_H
 
-extern volatile uint8_t set_display;
-extern volatile uint16_t one_sec_count;
+extern volatile uint8_t int_flag;
+extern volatile uint8_t time_count;
 
 void timer0_init(void);
 

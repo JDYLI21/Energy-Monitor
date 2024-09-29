@@ -6,30 +6,75 @@
  */ 
 #include "common.h"
 #include "external_interrupts.h"
-#include "timer2.h"
+#include "timer0.h"
+#include "timer1.h"
+#include "adc.h"
 
+#include <string.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 // For storing the zero crossing time / counter when zero crossing is reached
-volatile uint32_t time_difference = 0;
+volatile uint16_t time_difference = 0;
+volatile uint16_t period = 0;
+volatile uint8_t period_count = 0;
+
+// Flag for whether ADC should be sampled (0) or display should be refreshed (1)
+volatile uint8_t timer0_flag = 0;
+
+// Flag for the start of every sampling iteration to set TCNT1 to 0
+volatile uint8_t first_run_flag = 0;
 
 // For when voltage's zero crossing has been detected
 ISR(INT0_vect) {
-	cli();
-	timer2_stop();
-	// For if timer2 overflows as it is 8 bit and we need to go up to 500
-	time_difference += (timer2_overflow_count * 255) + TCNT2; // Add TCNT2 count
-	sei();
+	// Increment every time the voltage signal passes by
+	time_difference += TCNT1; // Add TCNT1 count
 }
 
 // For when current's zero crossing has been detected
 ISR(INT1_vect) {
-	timer2_init();
+	if (!first_run_flag) {
+		first_run_flag = 1;
+		TCNT1 = 0;
+	} else {
+		// Increment with every passing period
+		period += TCNT1;
+		TCNT1 = 0;
+		period_count++;
+		
+		timer0_flag ^= 1;
+		if (timer0_flag) {
+			sampling = 0;
+			samples_taken += 1;
+		} else {
+			sampling = 1;
+			TCNT0 = 0;
+			ADCSRA |= (1 << ADSC); // Start ADC conversion
+			set_display = 0;
+		}
+	}	
 }
 
 // Initialise INT0 and INT1 interrupts for zero crossing
 void external_interrupts_init(void) {
 	EICRA = (1 << ISC01) | (1 << ISC00) | (1 << ISC11) | (1 << ISC10); // Trigger INT0 and INT1 on rising edge
 	EIMSK = (1 << INT0) | (1 << INT1); // Enable INT0 and INT1
+}
+
+void external_interrupts_enable(void) {
+	EIMSK = (1 << INT0) | (1 << INT1); // Enable INT0 and INT1 interrupts
+}
+
+void external_interrupts_disable(void) {
+	sampling = 0;
+	EIMSK &= ~((1 << INT0) | (1 << INT1)); // Disable INT0 and INT1 interrupts
+}
+
+void external_interrupts_reset(void) {
+	time_difference = 0;
+	period = 0;
+	period_count = 0;
+	
+	timer0_flag = 0;
+	first_run_flag = 0;
 }

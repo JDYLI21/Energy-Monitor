@@ -184,12 +184,6 @@
     <Compile Include="timer1.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="timer2.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="timer2.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="uart.c">
       <SubType>compile</SubType>
     </Compile>

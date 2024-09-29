@@ -14,8 +14,8 @@
 void uart_init(uint16_t ubrr) {
 	UBRR0H = (unsigned char)(ubrr >> 8); // I used unsigned char here but it's not really necessary
 	UBRR0L = (unsigned char)ubrr; // More of a just in case i guess
-	UCSR0B = (1 << TXEN0);
-	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // 8 bit character size
+	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
+	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 }
 
 // Same transmit function as I used in labs 3 and 4

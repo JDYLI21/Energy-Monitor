@@ -9,6 +9,9 @@
 
 #include <stdint.h>
 
+extern volatile uint16_t delta;
+extern volatile uint8_t crossing_ready;
+
 void timer1_init(void);
 
 #endif
