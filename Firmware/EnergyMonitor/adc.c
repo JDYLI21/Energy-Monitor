@@ -27,11 +27,6 @@ volatile uint16_t sample_index = 0;
 
 ISR(ADC_vect) {
 	if (sampling) {
-		if (sample_index >= TOTAL_SAMPLES) {
-			PORTB |= (1 << PORTB5);
-			sample_index = 0;
-		}
-		
 		if (current_channel == 0) {
 			voltages[sample_index] = ADC;
 			} else {

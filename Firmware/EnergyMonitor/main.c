@@ -88,7 +88,7 @@ int main(void)
 		
 		// ---------------------------------------
 		
-		uint32_t phase = ((uint32_t)time_difference * 360) / (uint32_t)period;
+		float phase = ((uint32_t)time_difference * 2 * M_PI) / (period_count - 1) / ((uint32_t)period / period_count);
 		
 		// These two variables will be incremented with the calculated squared values
 		uint32_t rms_voltage = 0;
@@ -118,10 +118,9 @@ int main(void)
 		rms_voltage = (uint32_t)sqrt(rms_voltage / sample_index);
 		rms_current = (uint32_t)sqrt(rms_current / sample_index);
 		
-		uint32_t power = rms_voltage * (10) * rms_current * cos((uint32_t)time_difference * 2 * M_PI / (uint32_t)period);
+		uint32_t power = rms_voltage * (10) * rms_current * cosf(phase);
 		power /= 10000;
 		
-		/*
 		for (int i = 0; i < sample_index; i++) {
 			uart_transmit_count(voltages[i]);
 			uart_transmit(',');
@@ -130,10 +129,9 @@ int main(void)
 			uart_transmit(13);
 			uart_transmit(10);
 		} 
-		*/
 		
 		char buffer2[100];
-		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\n Power: %lu W\r\n", rms_voltage, rms_current, power);
+		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\n Power: %lu W\r\n Phase: %u \r\n", rms_voltage, rms_current, power, (int)(phase * 1000));
 		uart_transmit_string(buffer2);
 		
 		while (one_sec_count < 10000) {

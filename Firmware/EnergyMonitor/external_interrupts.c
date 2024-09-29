@@ -38,19 +38,19 @@ ISR(INT1_vect) {
 		TCNT1 = 0;
 	} else {
 		// Increment with every passing period
-		period += TCNT1;
+		period += TCNT1 + 22;
 		TCNT1 = 0;
 		period_count++;
-		
+		// FOR SOME REASON ON 4TH SAMPLE ITERATION THE LAST SAMPLE IS SKIPPED AT TCNT1 3973
 		timer0_flag ^= 1;
 		if (timer0_flag) {
 			sampling = 0;
 			samples_taken += 1;
 			set_display = 1;
 		} else {
-			sampling = 1;
 			TCNT0 = 0;
 			ADCSRA |= (1 << ADSC); // Start ADC conversion
+			sampling = 1;
 			set_display = 0;
 		}
 	}	

@@ -24,8 +24,8 @@ ISR(TIMER0_COMPA_vect) {
 	if (!sampling) {
 		disp_refresh++;
 		if (disp_refresh == 333); //30Hz refresh rate for display
-			set_display = 1;
 			disp_refresh = 0;
+			set_display = 1;
 	}
 }
 
