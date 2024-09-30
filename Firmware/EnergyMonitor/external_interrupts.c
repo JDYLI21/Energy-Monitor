@@ -28,20 +28,20 @@ volatile uint8_t first_run_flag = 0;
 // For when voltage's zero crossing has been detected
 ISR(INT0_vect) {
 	// Increment every time the voltage signal passes by
-	time_difference += TCNT1; // Add TCNT1 count
+	time_difference += TCNT1 + 35; // Add TCNT1 count + Delay from ISR to adding TCNT1 and from INT1 till TCNT1 reset
 }
 
 // For when current's zero crossing has been detected
 ISR(INT1_vect) {
 	if (!first_run_flag) {
-		first_run_flag = 1;
 		TCNT1 = 0;
+		first_run_flag = 1;
 	} else {
 		// Increment with every passing period
-		period += TCNT1 + 22;
+		period += TCNT1 + 22; // Delay from INT1 vect till adding TCNT1
 		TCNT1 = 0;
 		period_count++;
-		// FOR SOME REASON ON 4TH SAMPLE ITERATION THE LAST SAMPLE IS SKIPPED AT TCNT1 3973
+		
 		timer0_flag ^= 1;
 		if (timer0_flag) {
 			sampling = 0;
@@ -78,4 +78,5 @@ void external_interrupts_reset(void) {
 	
 	timer0_flag = 0;
 	first_run_flag = 0;
+	TCNT1 = 0;
 }

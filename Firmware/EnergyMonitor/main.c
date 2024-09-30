@@ -37,24 +37,14 @@ int main(void)
 	timer1_init(); // Initialise timer1 for measuring period and phase of signal
 	external_interrupts_init(); // Initialise the external interrupts for zero crossing detection
 	sei();	
-	/*
+	
 	// Define the circuit parameters, such as amplification and voltage offsets
 	const int32_t VOLTAGE_SCALE = 1 * 22; // 1 for Unity Gain Amplifier and 22 for Voltage Divider
 	const int32_t CURRENT_SCALE = 39; // 3.9 but avoiding floats here
 	const int32_t OFFSET = 2500; // mV
-	*/
 	
-	// Debug -------------------------------------------------
-	const int32_t VOLTAGE_SCALE = 141;
-	const int32_t CURRENT_SCALE = 2;
-	const int32_t OFFSET = 2500;
-	// ------------------------------------------------------
-	
-	// Initially load 0.00V onto the display
+	// Initially load 00.0V onto the display
 	separate_and_load_characters(0);
-	
-	// Debugging
-	DDRB |= (1 << DDB5);
 	
 	/* Replace with your application code */
 	while (1)
@@ -68,6 +58,10 @@ int main(void)
 			
 		external_interrupts_disable();
 		adc_disable();
+		
+		// Offset the check for first run in INT1_vect
+		time_difference -= 22;
+		period -= 35; 
 		
 		// ------------ DEBUGGING --------------
 		char buffer[9];
@@ -88,7 +82,7 @@ int main(void)
 		
 		// ---------------------------------------
 		
-		float phase = ((uint32_t)time_difference * 2 * M_PI) / (period_count - 1) / ((uint32_t)period / period_count);
+		float phase = ((uint32_t)time_difference * 2 * M_PI) / (uint32_t)period;
 		
 		// These two variables will be incremented with the calculated squared values
 		uint32_t rms_voltage = 0;
@@ -105,8 +99,8 @@ int main(void)
 			int32_t current_diff = current_mA - OFFSET;
 			
 			// Apply the amplification
-			int32_t scaled_voltage = (voltage_diff * VOLTAGE_SCALE) / 10 / 10; 
-			int32_t scaled_current = (current_diff * CURRENT_SCALE); // Change current scale back to 3.9
+			int32_t scaled_voltage = (voltage_diff * VOLTAGE_SCALE) / 10; // / 10 is to avoid overflow
+			int32_t scaled_current = (current_diff * CURRENT_SCALE) / 10; // Change current scale back to 3.9
 			
 			// Square and increment result in its respective rms variable
 			rms_voltage += scaled_voltage * scaled_voltage;
@@ -121,6 +115,7 @@ int main(void)
 		uint32_t power = rms_voltage * (10) * rms_current * cosf(phase);
 		power /= 10000;
 		
+		/* 
 		for (int i = 0; i < sample_index; i++) {
 			uart_transmit_count(voltages[i]);
 			uart_transmit(',');
@@ -129,6 +124,7 @@ int main(void)
 			uart_transmit(13);
 			uart_transmit(10);
 		} 
+		*/
 		
 		char buffer2[100];
 		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %lu mV\r\nRMS Current: %lu mA\r\n Power: %lu W\r\n Phase: %u \r\n", rms_voltage, rms_current, power, (int)(phase * 1000));
