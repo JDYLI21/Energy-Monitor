@@ -16,6 +16,10 @@
 volatile uint16_t voltages[TOTAL_SAMPLES];
 volatile uint16_t currents[TOTAL_SAMPLES];
 
+volatile uint16_t temp = 0;
+volatile uint16_t temp_arr[200];
+volatile uint8_t iter = 0;
+
 // Keeps track of when the ADC is meant to be sampling
 volatile uint8_t sampling = 0;
 volatile int8_t samples_taken = -1; // Used in Timer0
@@ -26,7 +30,11 @@ volatile uint8_t current_channel = 0;
 volatile uint16_t sample_index = 0;
 
 ISR(ADC_vect) {
+	//temp = TCNT1;
 	if (sampling) {
+		//temp_arr[iter] = temp;
+		//iter++;
+		
 		if (current_channel == 0) {
 			voltages[sample_index] = ADC;
 			} else {
@@ -44,7 +52,7 @@ ISR(ADC_vect) {
 
 void adc_init(void) {
 	ADMUX |= (1 << REFS0); // Set reference voltage to A_VCC
-	ADCSRA |= (1 << ADPS2); // Prescaler of 16 giving us sampling rate of 9.6kHz assuming 2Mhz clock
+	ADCSRA = (1 << ADPS1) | (1 << ADPS0); // Prescaler of 8 giving us conversion rate of 19.2kHz assuming 2Mhz clock
 	ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADATE); // Enable ADC, interrupt on conversion and auto trigger
 	ADCSRB = (1 << ADTS1) | (1 << ADTS0); // Set to trigger on Timer0 COMPA
 }

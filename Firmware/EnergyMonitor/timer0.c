@@ -13,19 +13,18 @@
 #include <avr/interrupt.h>
 
 volatile uint8_t set_display = 0;
-volatile uint16_t disp_refresh = 0;
+volatile uint16_t refresh_count = 0; // 333 means 30Hz refresh
 volatile uint16_t one_sec_count = 0; // 10,000 means one second has passed
 
 /* Timer for ADC Auto Triggering on COMPA and Display Refresh */
 
 ISR(TIMER0_COMPA_vect) {
+	refresh_count++;
 	one_sec_count++;
-	// If the sampling flag is not set, ADC is no longer sampling so display should refresh
-	if (!sampling) {
-		disp_refresh++;
-		if (disp_refresh == 333); //30Hz refresh rate for display
-			disp_refresh = 0;
-			set_display = 1;
+	
+	if (refresh_count == 333) {
+		set_display = 1;
+		refresh_count = 0;
 	}
 }
 

@@ -8,7 +8,7 @@
 #define EXTERNAL_INTERRUPTS_H
 
 extern volatile uint16_t time_difference;
-extern volatile uint16_t period;
+extern volatile uint32_t period;
 extern volatile uint8_t period_count;
 
 void external_interrupts_init(void);
