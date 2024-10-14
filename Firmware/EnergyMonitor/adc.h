@@ -10,8 +10,7 @@
 #include <stdint.h>
 #include "common.h"
 
-extern volatile uint8_t sampling;
-extern volatile int8_t samples_taken;
+extern volatile uint8_t samples_taken;
 extern volatile uint8_t sampling_complete;
 extern volatile uint16_t sample_index;
 

@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="S8A9wPHZi9r6ODj7bREW">
+    <mxGraphModel dx="2586" dy="1433" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-1" value="Start" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="80" y="20" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XKiB5YxJe8Btzxz_4naM-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="670" as="sourcePoint" />
+            <mxPoint x="140" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="PmSmuW7GfOc8M95kgC_l-1" target="PmSmuW7GfOc8M95kgC_l-2" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="200" as="sourcePoint" />
+            <mxPoint x="140" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="XKiB5YxJe8Btzxz_4naM-6" target="XKiB5YxJe8Btzxz_4naM-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-6" value="Load 0.00V onto display" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="80" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="PmSmuW7GfOc8M95kgC_l-2" target="XKiB5YxJe8Btzxz_4naM-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="300" as="sourcePoint" />
+            <mxPoint x="490" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-8" value="sampling complete&lt;div&gt;&amp;nbsp;flag&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="80" y="450" width="120" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="XKiB5YxJe8Btzxz_4naM-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="670" as="sourcePoint" />
+            <mxPoint x="290" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="XKiB5YxJe8Btzxz_4naM-8" edge="1" target="PmSmuW7GfOc8M95kgC_l-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="670" as="sourcePoint" />
+            <mxPoint x="140" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-11" value="True" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="210" y="460" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XKiB5YxJe8Btzxz_4naM-12" value="False" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="150" y="560" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="XKiB5YxJe8Btzxz_4naM-1" target="PmSmuW7GfOc8M95kgC_l-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-1" value="Initialise UART,&amp;nbsp;&lt;div&gt;ADC, display, timer0, and interrupts&lt;/div&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-2" value="Initialise circuit parameter variables" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-7" value="Wait for INT0&amp;nbsp;&lt;div&gt;interrupt&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="600" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-8" value="Set TCNT0 to 0" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="710" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-9" value="Enable ADC autotrigger" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="830" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-12" value="Disable INT0&amp;nbsp;&lt;div&gt;interrupt&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-13" value="Wait for TIMER0_COMPA interrupt" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1080" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-14" value="sample_signal" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1210" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-15" value="read ADC into&amp;nbsp;&lt;div&gt;current array&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-16" value="read ADC into&amp;nbsp;&lt;div&gt;voltage array&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-17" value="Increment sample_index" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-18" value="sample_index &amp;gt; 15" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1500" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-19" value="Switch ADC channel" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1510" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-20" value="Reset sample_index" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1660" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PmSmuW7GfOc8M95kgC_l-21" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1790" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
