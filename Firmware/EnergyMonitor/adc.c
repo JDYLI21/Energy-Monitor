@@ -44,6 +44,7 @@ ISR(ADC_vect) {
 			if (samples_taken == NUM_PERIODS) {
 				sampling_complete = 1;
 				samples_taken = 0;
+				external_interrupts_disable();
 			}
 		}
 	}
@@ -62,5 +63,6 @@ void adc_reset(void) {
 		currents[i] = 0;
 	}
 	
+	sample_index = 0;
 	sampling_complete = 0;
 }

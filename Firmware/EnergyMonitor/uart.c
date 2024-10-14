@@ -5,6 +5,7 @@
  *  Author: Y3J5bw
  */ 
 #include "uart.h"
+#include "display.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -29,28 +30,6 @@ void uart_transmit_string(const char *str) {
 	// Unpacks the str char array and steps through it
 	while (*str) {
 		uart_transmit(*str++);
+		send_next_character_to_display();
 	}
-}
-
-// So I don't need so many uart_transmit spam in the main routine
-void uart_transmit_newline(void) {
-	// Line Feed then Carriage Return
-	// So new line, then point to start of the new line
-	uart_transmit(10);
-	uart_transmit(13);
-}
-
-void uart_transmit_count(uint16_t count) {
-	char ascii_count[4];
-	ascii_convert(count, ascii_count);
-	for (int i = 0; i < 4; i++) {
-		uart_transmit(ascii_count[i]);
-	}
-}
-
-void ascii_convert(uint16_t count, char *buffer) {
-	buffer[0] = (count / 1000) + '0';
-	buffer[1] = ((count / 100) % 10) + '0';
-	buffer[2] = ((count / 10) % 10) + '0';
-	buffer[3] = count % 10 + '0';
 }

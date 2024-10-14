@@ -17,17 +17,20 @@ static volatile uint8_t disp_characters[4]={0x3E,0,0,0};
 static volatile uint8_t disp_position=0;
 
 // Maps the hex values for each number to the 7 seg layout
-const uint8_t seg_map[10] = {
-	0x3F,
-	0x06,
-	0x5B,
-	0x4F,
-	0x66,
-	0x6D,
-	0x7D,
-	0x07,
-	0x7F,
-	0x6F
+const uint8_t seg_map[13] = {
+	0x3F, // 0
+	0x06, // 1
+	0x5B, // 2
+	0x4F, // 3
+	0x66, // 4
+	0x6D, // 5
+	0x7D, // 6
+	0x07, // 7
+	0x7F, // 8
+	0x6F, // 9
+	0x3E, // U for V
+	0x77, // A for A
+	0x73 // P for W
 };
 
 void display_init(void) {
@@ -38,18 +41,28 @@ void display_init(void) {
 }
 
 // Change the number to be displayed
-void separate_and_load_characters(uint32_t num) {
+void separate_and_load_characters(uint32_t num, uint8_t disp_param) {
 	num /= 10;
 	
 	for (int i = 1; i < 4; i++) {
 		uint8_t digit = num % 10;
 		disp_characters[i] = seg_map[digit];
 		
-		// Display the decimal point right after the first digit
-		disp_characters[2] |= (1 << 7);
-		
 		// Shift the number to the next digit for the next iteration
 		num /= 10;
+	}
+	
+	disp_characters[0] = seg_map[10 + disp_param];
+	switch (disp_param) {
+		case 0:
+			disp_characters[2] |= (1 << 7);
+			break;
+		case 1:
+			disp_characters[3] |= (1 << 7);
+			break;
+		case 2:
+			disp_characters[3] |= (1 << 7);
+			break;
 	}
 }
 

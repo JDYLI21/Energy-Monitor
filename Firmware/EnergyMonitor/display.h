@@ -10,7 +10,7 @@
 #define DISPLAY_H
 
 void display_init(void);
-void separate_and_load_characters(uint32_t num);
+void separate_and_load_characters(uint32_t num, uint8_t disp_param);
 void send_next_character_to_display(void);
 
 #endif

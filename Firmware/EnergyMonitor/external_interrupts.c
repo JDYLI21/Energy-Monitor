@@ -29,3 +29,7 @@ void external_interrupts_init(void) {
 void external_interrupts_enable(void) {
 	EIMSK |= (1 << INT0); // Enable INT0 interrupts
 }
+
+void external_interrupts_disable(void) {
+	EIMSK &= ~(1 << INT0);
+}
