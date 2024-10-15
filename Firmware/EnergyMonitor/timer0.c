@@ -22,7 +22,7 @@ ISR(TIMER0_COMPA_vect) {
 	refresh_count++;
 	one_sec_count++;
 	
-	if (refresh_count == 167) {
+	if (refresh_count == 25) {
 		set_display = 1;
 		refresh_count = 0;
 	}
