@@ -50,20 +50,37 @@ int main(void)
 	sei();	
 	
 	// Define the circuit parameters, such as amplification and voltage offsets
-	const int32_t VOLTAGE_SCALE = 2782; // 0.849 for Unity Gain Amplifier and 23.63 for Voltage Divider
-	const int32_t CURRENT_SCALE = 1212; // 1.212 but avoiding floats here
+	const int32_t VOLTAGE_SCALE = 2234; // 0.849 for Unity Gain Amplifier and 23.63 for Voltage Divider
+	const int32_t CURRENT_SCALE = 2825; // 0.2825 but avoiding floats here
 	const int32_t OFFSET = 2270; // mV
-	const int32_t I_SENS = 3065; // 0.30646 ohms 
-	
-	/* Proteus model
-	const int32_t VOLTAGE_SCALE = 2300; // 0.849 for Unity Gain Amplifier and 23.63 for Voltage Divider
-	const int32_t CURRENT_SCALE = 3900; // 1.212 but avoiding floats here
-	const int32_t OFFSET = 2500; // mV
-	const int32_t I_SENS = 2820; // 0.30646 ohms */
+	const int32_t I_SENS = 3065; // 0.30646 ohms
 	
 	// Toggle between displaying RMS voltage (0), peak current (1), or power (2)
 	uint8_t disp_param = 0;
 	
+	// Moving average for energy
+	uint8_t energy_first_run = 0;
+	uint8_t energy_iter = 0;
+	uint32_t energy[3];
+		
+	// Somethingkdsrzhgjflkzjruhglidzsruhgrd9gyh9p 843yt9h34
+	int32_t rms_voltage = 0;
+	int32_t peak_current = 0;
+	int32_t power = 0;
+	
+	int32_t voltage_mV = 0;
+	int32_t current_mA = 0;
+	
+	int32_t voltage_diff = 0;
+	int32_t current_diff = 0;
+	
+	int32_t scaled_voltage = 0;
+	int32_t scaled_current = 0;
+	
+	int32_t power_iter = 0;
+	
+	char buffer[100];
+
 	// Initially load 00.0V onto the display
 	separate_and_load_characters(0, disp_param);
 
@@ -77,44 +94,37 @@ int main(void)
 				set_display = 0;
 			}
 		}
-	
-		// Somethingkdsrzhgjflkzjruhglidzsruhgrd9gyh9p 843yt9h34
-		uint32_t rms_voltage = 0;
-		uint32_t peak_current = 0;
-		uint32_t power = 0;
 		/*
+		char temp[100];
 		for (int i = 0; i < sample_index; i++) {
-			uart_transmit_count(voltages[i]);
-			uart_transmit(',');
-			uart_transmit(' ');
-			uart_transmit_count(currents[i]);
-			uart_transmit(13);
-			uart_transmit(10);
-		}*/
-		
-		send_next_character_to_display();
+			snprintf(temp, 100, "%u, %u\r\n", voltages[i], currents[i]);
+			uart_transmit_string(temp);
+		} */
 		
 		// Undo the offset and amplification then square the result and store in its rms variable
 		for (int i = 0; i < sample_index; i++) {
 			// Convert from raw ADC value to mV
-			int32_t voltage_mV = voltages[i] * 5000UL / 1024;
-			int32_t current_mA = currents[i] * 5000UL / 1024;
+			voltage_mV = voltages[i] * 5000UL / 1024;
+			current_mA = currents[i] * 5000UL / 1024;
 			
 			// Undo the offset
-			int32_t voltage_diff = voltage_mV - OFFSET;
-			int32_t current_diff = current_mA - OFFSET;
+			voltage_diff = voltage_mV - OFFSET;
+			current_diff = current_mA - OFFSET;
 			
 			// Apply the amplification
-			int32_t scaled_voltage = (voltage_diff * VOLTAGE_SCALE) / 100 / 10; // / 10 is to avoid overflow
-			int32_t scaled_current = current_diff * 1000 / CURRENT_SCALE; // Change current scale back to 1.212
+			scaled_voltage = (voltage_diff * VOLTAGE_SCALE) / 1000; // / 10 is to avoid overflow
+			scaled_current = current_diff * 1000 / CURRENT_SCALE; // Change current scale back to 6.578
 			
 			// Square and increment result in its respective rms variable
 			rms_voltage += scaled_voltage * scaled_voltage;
+
 			if (scaled_current > abs(peak_current)) {
 				peak_current = abs(scaled_current);
 			}
-			uint32_t power_iter = scaled_voltage * scaled_current / I_SENS * 10000;
+			
+			power_iter = scaled_voltage * scaled_current * 10000 / I_SENS;
 			power += power_iter;
+			send_next_character_to_display();
 		}
 		
 		power = power / 10000 * 10125;
@@ -126,6 +136,21 @@ int main(void)
 		rms_voltage = (uint32_t)sqrt(rms_voltage / sample_index);
 		peak_current = peak_current * 10000 / I_SENS;
 		
+		if (!energy_first_run) {
+			for (int i = 0; i < 3; i++) {
+				energy[i] = power;
+				energy_first_run = 1;
+			}
+		}
+		
+		energy[energy_iter] = power;
+		energy_iter++;
+		if (energy_iter == 3) {
+			energy_iter = 0;
+		}
+		
+		send_next_character_to_display();
+		
 		// Split rms voltage to integer and decimal
 		int rms_voltage_int = rms_voltage / 100;
 		int rms_voltage_dec = rms_voltage % 100;
@@ -134,12 +159,17 @@ int main(void)
 		int power_int = power / 10000000;
 		int power_dec = power % 10000000 / 1000;
 		round_num(&power_int, &power_dec);
+	
+		// Get the average energy calculation and split the same way as power
+		uint32_t energy_avg = (energy[0] + energy[1] + energy[2]) / 3;
+		int energy_int = energy_avg / 10000000;
+		int energy_dec = energy_avg % 10000000 / 1000;
+		round_num(&energy_int, &energy_dec);
 		
 		send_next_character_to_display();
 		
-		char buffer2[100];
-		snprintf(buffer2, sizeof(buffer2), "RMS Voltage: %d.%02dV\r\nPeak Current: 0.%luA\r\nPower: %d.%03dW\r\n", rms_voltage_int, rms_voltage_dec, peak_current, power_int, power_dec);
-		uart_transmit_string(buffer2);
+		snprintf(buffer, sizeof(buffer), "RMS Voltage: %d.%02dV\r\nPeak Current: 0.%luA\r\nPower: %d.%03dW\r\nEnergy: %d.%03dW/s\r\n", rms_voltage_int, rms_voltage_dec, peak_current, power_int, power_dec, energy_int, energy_dec);
+		uart_transmit_string(buffer);
 		
 		// Wait till the one second since the start of the loop is over
 		while (one_sec_count < 10000) {
@@ -156,7 +186,7 @@ int main(void)
 				disp_param++;
 				break;
 			case 1:
-				separate_and_load_characters(round_num_disp(peak_current * 10), disp_param);
+				separate_and_load_characters(round_num_disp(peak_current), disp_param);
 				disp_param++;
 				break;
 			case 2:
@@ -167,6 +197,10 @@ int main(void)
 		
 		one_sec_count = 0;
 		
+		send_next_character_to_display();
+		
+		power = 0;
+		peak_current = 0;
 		adc_reset();
 		external_interrupts_enable();
 	}

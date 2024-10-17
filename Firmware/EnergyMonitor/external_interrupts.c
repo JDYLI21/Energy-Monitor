@@ -8,6 +8,7 @@
 #include "external_interrupts.h"
 #include "timer0.h"
 #include "adc.h"
+#include "display.h"
 
 #include <string.h>
 #include <avr/io.h>
