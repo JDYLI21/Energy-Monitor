@@ -53,6 +53,8 @@ void separate_and_load_characters(uint32_t num, uint8_t disp_param) {
 	}
 	
 	disp_characters[0] = seg_map[10 + disp_param];
+
+	// Display the decimal point
 	switch (disp_param) {
 		case 0:
 			disp_characters[2] |= (1 << 7);
@@ -76,16 +78,19 @@ void send_next_character_to_display(void) {
 		} else {
 			PORTC &= ~(1 << PORTC4);
 		}
-		
+		// Pulse the shift clock
 		PORTC |= (1 << PORTC3);
 		PORTC &= ~(1 << PORTC3);
 	}
-	
+	// Turn off all the displays
 	PORTD |= (1 << PORTD4) | (1 << PORTD5) | (1 << PORTD6) | (1 << PORTD7);
 	
+
+	// Shift the data to the shift register
 	PORTC |= (1 << PORTC5);
 	PORTC &= ~(1 << PORTC5);
 	
+	// Decide on which digit to activate
 	switch (disp_position) {
 		case 0:
 			PORTD &= ~(1 << PORTD7);
@@ -101,6 +106,7 @@ void send_next_character_to_display(void) {
 			break;
 	}
 	
+	// Increment the display position, and then reset when reaching the end
 	disp_position++;
 	if (disp_position >= 4) {
 		disp_position = 0;

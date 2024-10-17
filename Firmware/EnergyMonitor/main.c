@@ -63,7 +63,7 @@ int main(void)
 	uint8_t energy_iter = 0;
 	uint32_t energy[3];
 		
-	// Somethingkdsrzhgjflkzjruhglidzsruhgrd9gyh9p 843yt9h34
+	// Initialise variables for calculations
 	int32_t rms_voltage = 0;
 	int32_t peak_current = 0;
 	int32_t power = 0;
@@ -79,6 +79,7 @@ int main(void)
 	
 	int32_t power_iter = 0;
 	
+	// Initialise buffer for the display
 	char buffer[100];
 
 	// Initially load 00.0V onto the display
@@ -94,13 +95,8 @@ int main(void)
 				set_display = 0;
 			}
 		}
-		/*
-		char temp[100];
-		for (int i = 0; i < sample_index; i++) {
-			snprintf(temp, 100, "%u, %u\r\n", voltages[i], currents[i]);
-			uart_transmit_string(temp);
-		} */
-		
+
+
 		// Undo the offset and amplification then square the result and store in its rms variable
 		for (int i = 0; i < sample_index; i++) {
 			// Convert from raw ADC value to mV
@@ -118,15 +114,18 @@ int main(void)
 			// Square and increment result in its respective rms variable
 			rms_voltage += scaled_voltage * scaled_voltage;
 
+			// Change the peak current if the current is greater than the current peak
 			if (scaled_current > abs(peak_current)) {
 				peak_current = abs(scaled_current);
 			}
 			
+			// Calculate the power and increment the total power
 			power_iter = scaled_voltage * scaled_current * 10000 / I_SENS;
 			power += power_iter;
 			send_next_character_to_display();
 		}
 		
+		//
 		power = power / 10000 * 10125;
 		
 		send_next_character_to_display();
@@ -136,6 +135,7 @@ int main(void)
 		rms_voltage = (uint32_t)sqrt(rms_voltage / sample_index);
 		peak_current = peak_current * 10000 / I_SENS;
 		
+		// first run of energy calculation
 		if (!energy_first_run) {
 			for (int i = 0; i < 3; i++) {
 				energy[i] = power;
@@ -143,6 +143,7 @@ int main(void)
 			}
 		}
 		
+		// Rolling average of the energy calculation
 		energy[energy_iter] = power;
 		energy_iter++;
 		if (energy_iter == 3) {
@@ -168,6 +169,7 @@ int main(void)
 		
 		send_next_character_to_display();
 		
+		// Print the results to the UART
 		snprintf(buffer, sizeof(buffer), "RMS Voltage: %d.%02dV\r\nPeak Current: 0.%luA\r\nPower: %d.%03dW\r\nEnergy: %d.%03dW/s\r\n", rms_voltage_int, rms_voltage_dec, peak_current, power_int, power_dec, energy_int, energy_dec);
 		uart_transmit_string(buffer);
 		
@@ -194,11 +196,10 @@ int main(void)
 				disp_param = 0;
 				break;
 		}
-		
 		one_sec_count = 0;
 		
 		send_next_character_to_display();
-		
+		// Reset the variables for the next loop
 		power = 0;
 		peak_current = 0;
 		adc_reset();

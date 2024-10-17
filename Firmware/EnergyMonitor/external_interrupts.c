@@ -32,5 +32,5 @@ void external_interrupts_enable(void) {
 }
 
 void external_interrupts_disable(void) {
-	EIMSK &= ~(1 << INT0);
+	EIMSK &= ~(1 << INT0); // Disable INT0 interrupts
 }

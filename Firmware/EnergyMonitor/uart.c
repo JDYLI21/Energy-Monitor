@@ -16,6 +16,7 @@ volatile char uart_buffer[UART_BUFFER_SIZE];
 volatile uint8_t uart_buffer_read_pos = 0;
 volatile uint8_t uart_buffer_write_pos = 0;
 
+
 ISR(USART0_UDRE_vect) {
 	if (uart_buffer_read_pos != uart_buffer_write_pos) {
 		UDR0 = uart_buffer[uart_buffer_read_pos];
