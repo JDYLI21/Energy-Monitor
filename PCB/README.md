@@ -2,7 +2,7 @@
 
 # PCB for Smart Energy Monitor
 
-This folder should contain your Altium Designer files for your PCB design.
+This folder should contain your Altium Designer files for your PCB design..
 
 > [!WARNING]
 > Altium files are *binary* files rather than *text* files, meaning Git cannot easily track changes (at least not in a human-readable manner).
