@@ -5,4 +5,4 @@
 This folder should contain your Atmel Studio project with your firmware.
 
 > [!IMPORTANT]
-> Make sure to use separate modules, eg `uart.c`, `adc.c`, `timer1.c`, `display.c`, `energy-calculations.c`, etc.
+> Make sure to use separate modules, eg `uart.c`, `adc.c`, `timer1.c`, `display.c`, `energy-calculations.c`, etc..
